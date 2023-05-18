@@ -53,13 +53,12 @@ usuario.post("/usuarios", async (req, res) => {
       apellidos: req.body.apellidos,
     };
     cnn.query("INSERT INTO usuario set ?", data, (error, respuesta) => {
-      console.log(respuesta);
-      res.send("Insercion exitosa");
+      res.send(true);
       //res.sendStatus(200); Para no enviar un string si no un status
     });
   } catch (error) {
     console.log(error);
-    res.send("Error sapa");
+    res.send(false);
   }
 });
 
@@ -73,10 +72,17 @@ usuario.post("/login", async (req, res) => {
     } else {
       cnn.query("SELECT * FROM usuario where email = ?", [email], async (error, respuesta) => {
         if (respuesta.length == 0 || !(await bcrypt.compare(constraseña, respuesta[0].constraseña))) {
-          console.log("El usuario o la clave ingresada no esta registrado");
+          /* console.log("El usuario o la clave ingresada no esta registrado"); */
+          /* res.send({
+            estado: true,
+            nombre: "juanito",
+          }); */
+          /* res.sendStatus(200); */
+          res.send(false);
         } else {
           //Enviamos las variaboles al front end para que cargue la pagina correspondiente
-          console.log("BIENVENIDO AL SISTEMA DE INFORMACION " + respuesta[0].email + respuesta[0].constraseña);
+          /* console.log("BIENVENIDO AL SISTEMA DE INFORMACION " + respuesta[0].email + respuesta[0].constraseña); */
+          res.send(true);
         }
       });
     }
