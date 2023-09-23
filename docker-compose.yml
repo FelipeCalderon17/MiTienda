@@ -3,7 +3,7 @@ services:
   nodejs-app:
     image: node:18.15 # Utiliza la imagen oficial de Node.js
     container_name: my-nodejs-app
-    working_dir: /MiTienda
+    working_dir: C:\Users\afcal\OneDrive\Escritorio\E-tienda - copia\MiTienda
     volumes:
       - ./app:/app # Monta la aplicación en el contenedor
     ports:
