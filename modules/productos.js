@@ -12,7 +12,7 @@ producto.options("*", cors()); //Configura las ip admitidas por cors, * == todas
 //codificamos los verbos HTTP
 
 //Verbo GET LISTAR
-producto.get("/productos", (req, res) => {
+producto.get("/", (req, res) => {
   cnn.query("SELECT * FROM producto", (error, response) => {
     if (error) {
       throw error;
@@ -60,17 +60,13 @@ producto.put("/productos/:id", (req, res) => {
     estado: req.body.estado,
     fechaCreacion: req.body.fechaCreacion,
   };
-  cnn.query(
-    "UPDATE producto SET ? where idproducto = ?",
-    [data, id],
-    (error, respuesta) => {
-      if (error) {
-        console.log("Error!");
-      } else {
-        res.status(201);
-      }
+  cnn.query("UPDATE producto SET ? where idproducto = ?", [data, id], (error, respuesta) => {
+    if (error) {
+      console.log("Error!");
+    } else {
+      res.status(201);
     }
-  );
+  });
 });
 
 //verbo DELETE BORRAR

@@ -4,7 +4,9 @@ const cors = require("cors"); //Para evitar restricciones entre sitio
 const usuario = express.Router();
 const cnn = require("./bdatos");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken"); //Librería genera un token con el algoritmo sha256 ::: jwt.io
+require("dotenv/config");
+const secreto = process.env.secret;
 const { promisify } = require("util"); //la trae por defecto node js, me permite usar async/await opcion a fetch
 const { error } = require("console");
 const { CLIENT_RENEG_LIMIT } = require("tls");
@@ -17,7 +19,7 @@ usuario.options("*", cors()); //Configura las ip admitidas por cors, * == todas
 //codificamos los verbos HTTP
 
 //Verbo GET LISTAR
-usuario.get("/usuarios", (req, res) => {
+usuario.get("/", (req, res) => {
   try {
     cnn.query("SELECT idUsuario,nombre,apellidos,email FROM usuario", async (error, response) => {
       console.log(response);
@@ -82,7 +84,9 @@ usuario.post("/login", async (req, res) => {
         } else {
           //Enviamos las variaboles al front end para que cargue la pagina correspondiente
           /* console.log("BIENVENIDO AL SISTEMA DE INFORMACION " + respuesta[0].email + respuesta[0].constraseña); */
-          res.send(true);
+          /* res.send(true); */
+          const token = jwt.sign({ userId: respuesta[0].idUsuario }, secreto, { expiresIn: "1d" });
+          res.send({ user: respuesta[0].email, token: token });
         }
       });
     }

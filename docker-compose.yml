@@ -1,0 +1,32 @@
+version: '3'
+services:
+  nodejs-app:
+    image: node:18.15 # Utiliza la imagen oficial de Node.js
+    container_name: my-nodejs-app
+    working_dir: /MiTienda
+    volumes:
+      - ./app:/app # Monta la aplicación en el contenedor
+    ports:
+      - "4000:4000" # Mapea el puerto 3000 del contenedor al puerto 3000 del host
+    depends_on:
+      - mysql-db # Espera a que el servicio de MySQL esté disponible
+    environment:
+      NODE_ENV: development
+      MYSQL_HOST: mysql-db
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ""
+      MYSQL_DATABASE: ecommerce
+    command: npm start
+
+  mysql-db:
+    image: mysql:5.7 # Utiliza una imagen de MySQL 5.7
+    container_name: my-mysql-db
+    ports:
+      - "3307:3306" # Mapea el puerto 3306 del contenedor al puerto 3306 del host
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_DATABASE: ecommerce
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ""
+
